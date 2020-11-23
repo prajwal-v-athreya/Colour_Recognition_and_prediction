@@ -28,9 +28,13 @@ def find_blue():
         up_rangeb = np.array([130,255,255])
         maskb = cv.inRange(hsv, low_rangeb , up_rangeb)
 
+        res = cv.bitwise_and(frame,frame, mask= maskb)
+
         no_blue = cv.countNonZero(maskb)
+
         cv.imshow('original',frame)
         cv.imshow('mask', maskb)
+        cv.imshow('Final',res)
         key = cv.waitKey(30)
         if( key == ord('q') or key == 27):
             break
@@ -53,9 +57,42 @@ def find_red():
         up_ranger = np.array([189,255,255])
         maskr = cv.inRange(hsv , low_ranger , up_ranger)
 
+        res = cv.bitwise_and(frame,frame, mask= maskr)
+
         no_red = cv.countNonZero(maskr)
+
         cv.imshow('original',frame)
         cv.imshow('mask', maskr)
+        cv.imshow('Final',res)
+        key = cv.waitKey(30)
+        if( key == ord('q') or key == 27):
+            break
+
+def find_green():
+    while True:
+
+        ret, frame = cap.read()
+        if ret == False:
+            break
+
+        height = frame.shape[0]
+        width = frame.shape[1]
+        total_pixles = height * width
+        gray = cv.cvtColor(frame,cv.COLOR_BGR2GRAY)
+        retval, frame_threshold = cv.threshold(frame,55,255, cv.THRESH_BINARY)
+
+        hsv = cv.cvtColor(frame,cv.COLOR_BGR2HSV)
+        low_range_g = np.array([36,0,0])
+        up_range_g = np.array([86,255,255])
+        mask_g = cv.inRange(hsv , low_range_g , up_range_g)
+
+        res = cv.bitwise_and(frame,frame, mask= mask_g)
+
+        no_red = cv.countNonZero(mask_g)
+
+        cv.imshow('original',frame)
+        cv.imshow('mask', mask_g)
+        cv.imshow('Final',res)
         key = cv.waitKey(30)
         if( key == ord('q') or key == 27):
             break
@@ -75,6 +112,10 @@ def main():
         elif(Option == 2):
 
             find_red()
+
+        elif(Option == 3):
+
+            find_green()
 
         else:
             print(Option)
